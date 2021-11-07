@@ -12,16 +12,20 @@
 using namespace std;
 
 /* Estructura para guardar metricas de la cache */
-struct metrics_data
+class Metrics_data
 {
-    float miss_load;
-    float miss_store;
-    float hit_load;
-    float hit_store;
-    int vict;
+    public: 
+        float miss_load;
+        float miss_store;
+        float hit_load;
+        float hit_store;
+        int vict;
+    
+        Metrics_data(float miss_load, float miss_store, float hit_load, float hits_store, int vict);
+        /* Imprime resultados de las funciones */
+        void show_metrics(int size, int associativity, int block_size, int* contador, int* contador_opt , bool optimized);
 };
 
-/* Imprime resultados de las funciones */
-void show_metrics(int size, int associativity, int block_size, metrics_data* metrics, int* contador, int* contador_opt , bool optimized);
+
 
 #endif // METRICS_H

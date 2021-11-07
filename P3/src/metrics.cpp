@@ -1,12 +1,19 @@
 #include <metrics.h>
 
+Metrics_data::Metrics_data(float miss_load, float miss_store, float hit_load, float hits_store, int vict){
+  this->miss_load = miss_load;
+  this->miss_store = miss_store;
+  this->hit_load = hit_load;
+  this->hit_store = hits_store;
+  this->vict = vict;
+}
 
-void show_metrics(int size, int associativity, int block_size, metrics_data* metrics, int* contador, int* contador_opt, bool optimized){
+
+void Metrics_data::show_metrics(int size, int associativity, int block_size, int* contador, int* contador_opt, bool optimized){
   
-  //Variables Globales
-  float totHits = metrics->hit_load + metrics->hit_store;
+  float totHits = hit_load + hit_store;
 
-  float totMiss = metrics->miss_load + metrics->miss_store;
+  float totMiss = miss_load + miss_store;
 
   float ratioMissHit = 100 - ((float(*contador_opt))/(float(*contador)))*100;
 
@@ -24,23 +31,23 @@ void show_metrics(int size, int associativity, int block_size, metrics_data* met
 
   //Impresion de parametros de la cache
   cout << "\nParametros Fisicos Cache: \n"<< endl;
-  cout << "Tamaño del cache(KB):       "<< size << endl;
-  cout << "Cantidad de ways:           "<< associativity << endl;
-  cout << "Tamaño de bloque(B):        "<< block_size << endl;
-  cout << "\n"                          << endl;
-  cout << "Resultados obtenidos:\n"     << endl;
+  cout << "Tamaño del cache(KB):       "  << size << endl;
+  cout << "Cantidad de ways:           "  << associativity << endl;
+  cout << "Tamaño de bloque(B):        "  << block_size << endl;
+  cout << "\n"                            << endl;
+  cout << "Resultados obtenidos:\n"       << endl;
 
 
   // Imprimir valores enteros, sin notacion cientifica
   cout << fixed;
   cout << setprecision(0);
-  cout << "Cantidad total de Victimizaciones:      "<< metrics->vict << endl;
-  cout << "Cantidad total misses en lectura:       "<< metrics->miss_load << endl;
-  cout << "Cantidad total misses en escritura:     "<< metrics->miss_store << endl;
+  cout << "Cantidad total de Victimizaciones:      "<< vict << endl;
+  cout << "Cantidad total misses en lectura:       "<< miss_load << endl;
+  cout << "Cantidad total misses en escritura:     "<< miss_store << endl;
   cout << "Cantidad total misses:                  "<< totMiss << endl;
   cout << "\n"                                      << endl;
-  cout << "Cantidad total hits en lectura:         "<< metrics->hit_load << endl;
-  cout << "Cantidad total hits en escritura:       "<< metrics->hit_store << endl;
+  cout << "Cantidad total hits en lectura:         "<< hit_load << endl;
+  cout << "Cantidad total hits en escritura:       "<< hit_store << endl;
   cout << "Cantidad total hits:                    "<< totHits << endl;
   cout << "\n"                                      << endl;
 

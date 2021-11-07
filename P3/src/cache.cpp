@@ -1,30 +1,6 @@
 #include "cache.h"
 #include "metrics.h"
-
-
-// Crear estructura de matriz e inicializa metadatos
-flags **cache_blocks(int asociativity, int index)
-{
-	// Cantidad de bloques en cache
-	int set_amount = pow(2, index);
-
-	// Crea matriz de sets
-	flags **cache = new flags *[set_amount];
-
-	// Crea ways para la cache
-	for (int i = 0; i < set_amount; i++) cache[i] = new flags[asociativity];
-
-	// Se inicializa los valores de toda la cache
-	for (int i = 0; i < set_amount; i++)
-		for (int j = 0; j < asociativity; j++){
-			cache[i][j].valid = false;
-			cache[i][j].dirty = false;
-			cache[i][j].tag = 0;
-			cache[i][j].rp_value = j;
-		}
-	
-	return cache;
-}
+#include "flags.h"
 
 // Funcion para obtener metadatos de la cache
 Cache_metadata::Cache_metadata(int cache_size, int block_size, int asociativity){
@@ -51,7 +27,7 @@ int Cache_metadata::get_index(long address){
 	return index;
 }
 
-void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadstore, flags *cache_blocks, int pred_array[], metrics_data* metrics, int *contador){
+void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadstore, Flags *cache_blocks, int pred_array[], Metrics_data* metrics, int *contador){
 	bool hit_miss = false;
 	// Revisar todas las vias del bloque de cache
 	int greatest = 0, greatest_contador = 0;
@@ -80,7 +56,6 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 			hit_miss = true;
 
 			// No hay victimizacion de bloquev
-			//result->dirty_eviction = false;
 			metrics->vict = metrics->vict;
 
 			// Si es load, se da un HIT de lectura
@@ -134,7 +109,6 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 				// Si hubo un load, se da MISS de lectura y dirty bit es cero
 				if (!loadstore){
 					cache_blocks[i].dirty = false;
-					//result->miss_hit = MISS_LOAD;
 					metrics->miss_load = (metrics->miss_load) + 1;
 					cache_blocks[i].contador_pred = 0;
 				}
@@ -168,7 +142,7 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 	}
 }
 
-void Cache_metadata::lru(int index, int tag, int associativity, bool loadstore, flags *cache_blocks, metrics_data *metrics, int* contador){
+void Cache_metadata::lru(int index, int tag, int associativity, bool loadstore, Flags *cache_blocks, Metrics_data *metrics, int* contador){
 	bool hit_miss = false;
 	// Revisar todas las vias del bloque de cache
 	for (int i = 0; i < associativity; i++){
