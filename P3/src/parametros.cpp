@@ -1,17 +1,17 @@
-#include "flags.h"
+#include "parametros.h"
 #include "cache.h"
-#include "metrics.h"
+#include "benchmark.h"
 
-Flags **Flags::cache_blocks(int asociativity, int index)
+Parametros **Parametros::cache_blocks(int asociativity, int index)
 {
 	// Cantidad de bloques en cache
 	int set_amount = pow(2, index);
 
 	// Crea matriz de sets
-	Flags **cache = new Flags *[set_amount];
+	Parametros **cache = new Parametros *[set_amount];
 
 	// Crea ways para la cache
-	for (int i = 0; i < set_amount; i++) cache[i] = new Flags[asociativity];
+	for (int i = 0; i < set_amount; i++) cache[i] = new Parametros[asociativity];
 
 	// Se inicializa los valores de toda la cache
 	for (int i = 0; i < set_amount; i++)

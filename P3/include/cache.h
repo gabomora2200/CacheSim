@@ -7,8 +7,8 @@
 #include <string.h>
 #include <math.h>
 #include <bitset>
-#include "metrics.h"
-#include "flags.h"
+#include "benchmark.h"
+#include "parametros.h"
 
 using namespace std;
 
@@ -28,10 +28,10 @@ class Cache_metadata {
     int get_index(long address);
 
     //Funcion para la politica de reemplazo LRU con optimizacion
-    void lru_opt(int idx, int tag, int associativity, bool loadstore, Flags* cache_blocks, int prediction[], Metrics_data* metrics, int *contador);
+    void lru_opt(int idx, int tag, int associativity, bool loadstore, Parametros* cache_blocks, int prediction[], Benchmark* metrics, int *contador);
 
     //Funcion para la politica de reemplazo LRU
-    void lru(int idx, int tag, int associativity, bool loadstore, Flags* cache_blocks, Metrics_data* metrics, int* contador);
+    void lru(int idx, int tag, int associativity, bool loadstore, Parametros* cache_blocks, Benchmark* metrics, int* contador);
 };
 
 #endif // CACHE_H

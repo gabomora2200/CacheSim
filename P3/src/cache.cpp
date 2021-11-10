@@ -1,6 +1,6 @@
 #include "cache.h"
-#include "metrics.h"
-#include "flags.h"
+#include "benchmark.h"
+#include "parametros.h"
 
 // Funcion para obtener metadatos de la cache
 Cache_metadata::Cache_metadata(int cache_size, int block_size, int asociativity){
@@ -27,7 +27,7 @@ int Cache_metadata::get_index(long address){
 	return index;
 }
 
-void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadstore, Flags *cache_blocks, int pred_array[], Metrics_data* metrics, int *contador){
+void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadstore, Parametros *cache_blocks, int pred_array[], Benchmark* metrics, int *contador){
 	bool hit_miss = false;
 	// Revisar todas las vias del bloque de cache
 	int greatest = 0, greatest_contador = 0;
@@ -142,7 +142,7 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 	}
 }
 
-void Cache_metadata::lru(int index, int tag, int associativity, bool loadstore, Flags *cache_blocks, Metrics_data *metrics, int* contador){
+void Cache_metadata::lru(int index, int tag, int associativity, bool loadstore, Parametros *cache_blocks, Benchmark *metrics, int* contador){
 	bool hit_miss = false;
 	// Revisar todas las vias del bloque de cache
 	for (int i = 0; i < associativity; i++){

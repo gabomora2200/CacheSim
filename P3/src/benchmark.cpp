@@ -1,6 +1,6 @@
-#include <metrics.h>
+#include <benchmark.h>
 
-Metrics_data::Metrics_data(float miss_load, float miss_store, float hit_load, float hits_store, int vict){
+Benchmark::Benchmark(float miss_load, float miss_store, float hit_load, float hits_store, int vict){
   this->miss_load = miss_load;
   this->miss_store = miss_store;
   this->hit_load = hit_load;
@@ -9,12 +9,10 @@ Metrics_data::Metrics_data(float miss_load, float miss_store, float hit_load, fl
 }
 
 
-void Metrics_data::show_metrics(int size, int associativity, int block_size, int* contador, int* contador_opt, bool optimized){
+void Benchmark::show_metrics(int size, int associativity, int block_size, int* contador, int* contador_opt, bool optimized){
   
   float totHits = hit_load + hit_store;
-
   float totMiss = miss_load + miss_store;
-
   float ratioMissHit = 100 - ((float(*contador_opt))/(float(*contador)))*100;
 
   if(optimized){
@@ -36,7 +34,6 @@ void Metrics_data::show_metrics(int size, int associativity, int block_size, int
   cout << "Tamaño de bloque(B):        "  << block_size << endl;
   cout << "\n"                            << endl;
   cout << "Resultados obtenidos:\n"       << endl;
-
 
   // Imprimir valores enteros, sin notacion cientifica
   cout << fixed;
@@ -64,7 +61,7 @@ void Metrics_data::show_metrics(int size, int associativity, int block_size, int
     cout << "Cantidad de predicciones correctas mediante la optimización: "<< *contador_opt << endl;
 
   }
-  if(!optimized){
+  else{
     
     cout << "\nRelacion de hits acertados optimizacion: " << (*contador_opt/totHits)*100 << "%" <<endl;
     cout << "\n"                                              << endl;
