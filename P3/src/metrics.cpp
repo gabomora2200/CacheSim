@@ -1,19 +1,19 @@
 #include <metrics.h>
 
-Metrics_data::Metrics_data(float miss_load, float miss_store, float hit_load, float hits_store, int vict){
-  this->miss_load = miss_load;
-  this->miss_store = miss_store;
-  this->hit_load = hit_load;
-  this->hit_store = hits_store;
-  this->vict = vict;
+Metrics_data::Metrics_data(float load_miss, float store_miss, float load_hit, float hits_store, int victim){
+  this->load_miss = load_miss;
+  this->store_miss = store_miss;
+  this->load_hit = load_hit;
+  this->store_hit = hits_store;
+  this->victim = victim;
 }
 
 
 void Metrics_data::show_metrics(int size, int associativity, int block_size, int* contador, int* contador_opt, bool optimized){
   
-  float totHits = hit_load + hit_store;
+  float totHits = load_hit + store_hit;
 
-  float totMiss = miss_load + miss_store;
+  float totMiss = load_miss + store_miss;
 
   float ratioMissHit = 100 - ((float(*contador_opt))/(float(*contador)))*100;
 
@@ -41,13 +41,13 @@ void Metrics_data::show_metrics(int size, int associativity, int block_size, int
   // Imprimir valores enteros, sin notacion cientifica
   cout << fixed;
   cout << setprecision(0);
-  cout << "Cantidad total de Victimizaciones:      "<< vict << endl;
-  cout << "Cantidad total misses en lectura:       "<< miss_load << endl;
-  cout << "Cantidad total misses en escritura:     "<< miss_store << endl;
+  cout << "Cantidad total de Victimizaciones:      "<< victim << endl;
+  cout << "Cantidad total misses en lectura:       "<< load_miss << endl;
+  cout << "Cantidad total misses en escritura:     "<< store_miss << endl;
   cout << "Cantidad total misses:                  "<< totMiss << endl;
   cout << "\n"                                      << endl;
-  cout << "Cantidad total hits en lectura:         "<< hit_load << endl;
-  cout << "Cantidad total hits en escritura:       "<< hit_store << endl;
+  cout << "Cantidad total hits en lectura:         "<< load_hit << endl;
+  cout << "Cantidad total hits en escritura:       "<< store_hit << endl;
   cout << "Cantidad total hits:                    "<< totHits << endl;
   cout << "\n"                                      << endl;
 

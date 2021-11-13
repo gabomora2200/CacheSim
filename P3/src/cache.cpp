@@ -55,17 +55,17 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 			// Hubo hit
 			hit_miss = true;
 
-			// No hay victimizacion de bloquev
-			metrics->vict = metrics->vict;
+			// No hay victimizacion de bloque
+			metrics->victim = metrics->victim;
 
 			// Si es load, se da un HIT de lectura
 			if (!loadstore) {
 				cache_blocks[i].contador_pred++;
-				metrics->hit_load = (metrics->hit_load) + 1;//result->miss_hit = HIT_LOAD;
+				metrics->load_hit = (metrics->load_hit) + 1;//result->miss_hit = LOAD_HIT;
 			}
 			// Por el contrario, se da HIT de escritura
 			else{
-				metrics->hit_store = (metrics->hit_store) + 1;
+				metrics->store_hit = (metrics->store_hit) + 1;
 				// El dirty se pasa a TRUE debido a que se escribe en cache un nuevo dato
 				cache_blocks[i].dirty = true;
 				cache_blocks[i].contador_pred++;
@@ -98,10 +98,10 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 			if (cache_blocks[i].rp_value == 0){
 				// La victimizacion del bloque depende del bit dirty del way LRU, si esta existe se lleva el bloque de cache a memoria
 				if(cache_blocks[i].dirty){	
-					metrics->vict = (metrics->vict) + 1;
+					metrics->victim = (metrics->victim) + 1;
 				}
 				else{
-					metrics->vict = metrics->vict;
+					metrics->victim = metrics->victim;
 				}
 				//result->dirty_eviction = cache_blocks[i].dirty;
 				//result->evicted_address = cache_blocks[i].tag;
@@ -109,15 +109,15 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 				// Si hubo un load, se da MISS de lectura y dirty bit es cero
 				if (!loadstore){
 					cache_blocks[i].dirty = false;
-					metrics->miss_load = (metrics->miss_load) + 1;
+					metrics->load_miss = (metrics->load_miss) + 1;
 					cache_blocks[i].contador_pred = 0;
 				}
 
 				// Si hubo store, se da un MISS de escritura y dirty bit es uno
 				else{
 					cache_blocks[i].dirty = true;
-					//result->miss_hit = MISS_STORE;
-					metrics->miss_store = (metrics->miss_store) + 1;
+					//result->miss_hit = STORE_MISS;
+					metrics->store_miss = (metrics->store_miss) + 1;
 					cache_blocks[i].contador_pred = 0;
 				}
 
@@ -153,14 +153,14 @@ void Cache_metadata::lru(int index, int tag, int associativity, bool loadstore, 
 			hit_miss = true;
 
 			// No hay victimizacion de bloque
-			metrics->vict = metrics->vict;
+			metrics->victim = metrics->victim;
 
 			// Si es load, se da un HIT de lectura
-			if (!loadstore) metrics->hit_load = (metrics->hit_load) + 1;//result->miss_hit = HIT_LOAD;
+			if (!loadstore) metrics->load_hit = (metrics->load_hit) + 1;//result->miss_hit = LOAD_HIT;
 			
 			// Por el contrario, se da HIT de escritura
 			else{
-				metrics->hit_store = (metrics->hit_store) + 1;
+				metrics->store_hit = (metrics->store_hit) + 1;
 				// El dirty se pasa a TRUE debido a que se escribe en cache un nuevo dato
 				cache_blocks[i].dirty = true;
 			}
@@ -185,22 +185,22 @@ void Cache_metadata::lru(int index, int tag, int associativity, bool loadstore, 
 			if (cache_blocks[i].rp_value == 0){
 				// La victimizacion del bloque depende del bit dirty del way LRU, si esta existe se lleva el bloque de cache a memoria
 				if(cache_blocks[i].dirty){	
-					metrics->vict = (metrics->vict) + 1;
+					metrics->victim = (metrics->victim) + 1;
 				}
 				else{
-					metrics->vict = metrics->vict;
+					metrics->victim = metrics->victim;
 				}
 
 				// Si hubo un load, se da MISS de lectura y dirty bit es cero
 				if (!loadstore){
 					cache_blocks[i].dirty = false;
-					metrics->miss_load = (metrics->miss_load) + 1;
+					metrics->load_miss = (metrics->load_miss) + 1;
 				}
 
 				// Si hubo store, se da un MISS de escritura y dirty bit es uno
 				else{
 					cache_blocks[i].dirty = true;
-					metrics->miss_store = (metrics->miss_store) + 1;
+					metrics->store_miss = (metrics->store_miss) + 1;
 				}
 
 				// Se actualiza criterio del LRU

@@ -15,13 +15,13 @@ using namespace std;
 class Metrics_data
 {
     public: 
-        float miss_load;
-        float miss_store;
-        float hit_load;
-        float hit_store;
-        int vict;
+        float store_hit;
+        float load_hit;
+        float store_miss;
+        float load_miss;
+        int victim;
     
-        Metrics_data(float miss_load, float miss_store, float hit_load, float hits_store, int vict);
+        Metrics_data(float load_miss, float store_miss, float load_hit, float hits_store, int victim);
         /* Imprime resultados de las funciones */
         void show_metrics(int size, int associativity, int block_size, int* contador, int* contador_opt , bool optimized);
 };
