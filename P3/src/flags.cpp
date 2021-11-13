@@ -16,8 +16,8 @@ Flags **Flags::cache_blocks(int asociativity, int index)
 	// Se inicializa los valores de toda la cache
 	for (int i = 0; i < set_amount; i++)
 		for (int j = 0; j < asociativity; j++){
-			cache[i][j].valid = false;
-			cache[i][j].dirty = false;
+			cache[i][j].valid_bit = false;
+			cache[i][j].dirty_bit = false;
 			cache[i][j].tag = 0;
 			cache[i][j].rp_value = j;
 		}
