@@ -3,7 +3,7 @@
 
 class Flags {
   public:
-    int contador_pred;
+    int counter_pred;
     bool valid;
     bool dirty;
     int tag;
@@ -11,6 +11,5 @@ class Flags {
 
     Flags **cache_blocks(int ways, int idx_size);
 };
-
 
 #endif 
