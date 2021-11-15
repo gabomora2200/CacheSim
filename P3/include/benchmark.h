@@ -1,5 +1,5 @@
-#ifndef METRICS_H
-#define METRICS_H
+#ifndef BENCHMARK_H
+#define BENCHMARK_H
 
 #include <iomanip>
 #include <iostream>
@@ -12,20 +12,18 @@
 using namespace std;
 
 /* Estructura para guardar metricas de la cache */
-class Metrics_data
+class Benchmark
 {
     public: 
-        float store_hit;
+        float load_miss;
         float load_hit;
         float store_miss;
-        float load_miss;
+        float store_hit;
         int victim;
     
-        Metrics_data(float load_miss, float store_miss, float load_hit, float hits_store, int victim);
+        Benchmark(float load_miss, float store_miss, float load_hit, float hits_store, int victim);
         /* Imprime resultados de las funciones */
         void show_metrics(int size, int associativity, int block_size, int* contador, int* contador_opt , bool optimized);
 };
 
-
-
-#endif // METRICS_H
+#endif // BENCHMARK_H

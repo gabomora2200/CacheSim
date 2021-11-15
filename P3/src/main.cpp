@@ -1,6 +1,6 @@
 #include <cache.h>
-#include <metrics.h>
-#include <flags.h>
+#include <benchmark.h>
+#include <parametros.h>
 
 int main(int argc, char *argv []) {
 
@@ -24,11 +24,11 @@ int main(int argc, char *argv []) {
 
   int index_size = log2(cache_size * 1024 / (block_size * asociativity));
 
-  Flags inst1;
-  Flags inst2;
+  Parametros inst1;
+  Parametros inst2;
 
-  Flags **cache = inst1.cache_blocks(asociativity, index_size);
-  Flags **cache_opt = inst2.cache_blocks(asociativity, index_size);
+  Parametros **cache = inst1.cache_blocks(asociativity, index_size);
+  Parametros **cache_opt = inst2.cache_blocks(asociativity, index_size);
   
   int set_amount = pow(2, index_size);
   int pred_array_opt[set_amount];
@@ -36,12 +36,12 @@ int main(int argc, char *argv []) {
   for(int i = 0; i < set_amount; i++) pred_array_opt[i] = 0;
 
   // Se crea instancia para guardas las metricas y se inicializan los valores 
-  Metrics_data metrics(0.0, 0.0, 0.0, 0.0,0);
+  Benchmark metrics(0.0, 0.0, 0.0, 0.0,0);
 
-  Metrics_data metrics_opt(0.0, 0.0, 0.0, 0.0,0);
+  Benchmark metrics_opt(0.0, 0.0, 0.0, 0.0,0);
   
   // Se crean las variables de interes
-  int load_store, tag, index;
+  int loadstore, tag, index;
   
   // Lineas de lectura y direccion
   char linea[200];
@@ -49,14 +49,14 @@ int main(int argc, char *argv []) {
   long direccion;      
 
   // Contadores para ambas cache, con y sin optimizacion
-  int counter = 0;
-  int counter_opt = 0;
+  int contador = 0;
+  int contador_opt = 0;
 
   while(fgets(linea, 50, stdin)!= NULL){
     // Si linea es valida se revisa y se obtienen los datos
     if(linea == NULL) break;
     else{
-      sscanf(linea, "%*s %d %s", &load_store, direccion_linea);
+      sscanf(linea, "%*s %d %s", &loadstore, direccion_linea);
       // String a long integer
       direccion = strtol(direccion_linea, NULL, 16); 
     }
@@ -68,16 +68,16 @@ int main(int argc, char *argv []) {
   // Se aplica la política LRU
 
   // Cache optimizada
-  metadata_opt.lru_opt(index, tag, asociativity, load_store, cache_opt[index], pred_array_opt, &metrics_opt, &counter_opt);
+  metadata_opt.lru_opt(index, tag, asociativity, loadstore, cache_opt[index], pred_array_opt, &metrics_opt, &contador_opt);
   
   // Cache sin optimizacion
-  metadata.lru(index, tag, asociativity, load_store, cache[index], &metrics, &counter);
+  metadata.lru(index, tag, asociativity, loadstore, cache[index], &metrics, &contador);
 
   }
 
   // Se imprimen metricas de cache
-  metrics_opt.show_metrics(cache_size, asociativity, block_size, &counter, &counter_opt, true);
-  metrics.show_metrics(cache_size, asociativity, block_size,  &counter, &counter_opt, false);
+  metrics_opt.show_metrics(cache_size, asociativity, block_size, &contador, &contador_opt, true);
+  metrics.show_metrics(cache_size, asociativity, block_size,  &contador, &contador_opt, false);
 
 
   return 0;
