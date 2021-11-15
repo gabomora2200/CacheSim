@@ -6,14 +6,14 @@
 Cache_metadata::Cache_metadata(int cache_size, int block_size, int asociativity){
 	// Obteniendo metadatos de cache
 	this->offset = log2(block_size);
-	this->idx = log2(cache_size * 1024 / (block_size * asociativity));
-	this->tag = 32 - idx - offset;
+	this->index = log2(cache_size * 1024 / (block_size * asociativity));
+	this->tag = 32 - index - offset;
 }
 
 // Funcion para obtener el tag de la direccion dada por el benchmark
 int Cache_metadata::get_tag(long address){
 	bitset<32> tag_s(address); 
-	tag_s >>= idx + offset;
+	tag_s >>= index + offset;
 	int tag = (int)(tag_s.to_ulong());
 	return tag;
 }
@@ -27,13 +27,13 @@ int Cache_metadata::get_index(long address){
 	return index;
 }
 
-void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadstore, Parametros *cache_blocks, int pred_array[], Benchmark* metrics, int *contador){
+void Cache_metadata::lru_opt(int index, int tag, int associativity, bool load_store, Parametros *cache_blocks, int pred_array[], Benchmark* metrics, int *counter){
 	bool hit_miss = false;
 	// Revisar todas las vias del bloque de cache
-	int greatest = 0, greatest_contador = 0;
+	int greatest = 0, greatest_counter = 0;
 	int valorInicial = pred_array[index];
 	int i = valorInicial;
-	int contador_valInit = 0;
+	int counter_valInit = 0;
 
 	int first_case = 0;
 
@@ -43,8 +43,8 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 			i = 0;
 		}
 		if(i == valorInicial) {
-			contador_valInit++;
-			if(contador_valInit == 2) {
+			counter_valInit++;
+			if(counter_valInit == 2) {
 				break;
 			}
 		}
@@ -59,8 +59,8 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 			metrics->victim = metrics->victim;
 
 			// Si es load, se da un HIT de lectura
-			if (!loadstore) {
-				cache_blocks[i].contador_pred++;
+			if (!load_store) {
+				cache_blocks[i].counter_pred++;
 				metrics->load_hit = (metrics->load_hit) + 1;//result->miss_hit = LOAD_HIT;
 			}
 			// Por el contrario, se da HIT de escritura
@@ -68,7 +68,7 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 				metrics->store_hit = (metrics->store_hit) + 1;
 				// El dirty se pasa a TRUE debido a que se escribe en cache un nuevo dato
 				cache_blocks[i].dirty = true;
-				cache_blocks[i].contador_pred++;
+				cache_blocks[i].counter_pred++;
 			}
 
 			// Se actualiza criterio del LRU
@@ -78,13 +78,13 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 				}
 			}
 
-			if (pred_array[index] <= cache_blocks[i].contador_pred){
+			if (pred_array[index] <= cache_blocks[i].counter_pred){
 				pred_array[index] = i;
 			}
 
 			// El bloque que obtuvo HIT ahora es el MRU
 			cache_blocks[i].rp_value = associativity - 1;
-			if(first_case == 1) *contador = *contador + 1;
+			if(first_case == 1) *counter = *counter + 1;
 			
 			break;
 		}
@@ -107,10 +107,10 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 				//result->evicted_address = cache_blocks[i].tag;
 
 				// Si hubo un load, se da MISS de lectura y dirty bit es cero
-				if (!loadstore){
+				if (!load_store){
 					cache_blocks[i].dirty = false;
 					metrics->load_miss = (metrics->load_miss) + 1;
-					cache_blocks[i].contador_pred = 0;
+					cache_blocks[i].counter_pred = 0;
 				}
 
 				// Si hubo store, se da un MISS de escritura y dirty bit es uno
@@ -118,7 +118,7 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 					cache_blocks[i].dirty = true;
 					//result->miss_hit = STORE_MISS;
 					metrics->store_miss = (metrics->store_miss) + 1;
-					cache_blocks[i].contador_pred = 0;
+					cache_blocks[i].counter_pred = 0;
 				}
 
 				// Se actualiza criterio del LRU
@@ -142,7 +142,7 @@ void Cache_metadata::lru_opt(int index, int tag, int associativity, bool loadsto
 	}
 }
 
-void Cache_metadata::lru(int index, int tag, int associativity, bool loadstore, Parametros *cache_blocks, Benchmark *metrics, int* contador){
+void Cache_metadata::lru(int index, int tag, int associativity, bool load_store, Parametros *cache_blocks, Benchmark *metrics, int* counter){
 	bool hit_miss = false;
 	// Revisar todas las vias del bloque de cache
 	for (int i = 0; i < associativity; i++){
@@ -156,7 +156,7 @@ void Cache_metadata::lru(int index, int tag, int associativity, bool loadstore, 
 			metrics->victim = metrics->victim;
 
 			// Si es load, se da un HIT de lectura
-			if (!loadstore) metrics->load_hit = (metrics->load_hit) + 1;//result->miss_hit = LOAD_HIT;
+			if (!load_store) metrics->load_hit = (metrics->load_hit) + 1;//result->miss_hit = LOAD_HIT;
 			
 			// Por el contrario, se da HIT de escritura
 			else{
@@ -192,7 +192,7 @@ void Cache_metadata::lru(int index, int tag, int associativity, bool loadstore, 
 				}
 
 				// Si hubo un load, se da MISS de lectura y dirty bit es cero
-				if (!loadstore){
+				if (!load_store){
 					cache_blocks[i].dirty = false;
 					metrics->load_miss = (metrics->load_miss) + 1;
 				}

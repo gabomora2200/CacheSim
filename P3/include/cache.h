@@ -15,7 +15,7 @@ using namespace std;
 class Cache_metadata {
   private:
     int tag;
-    int idx;
+    int index;
     int offset;
 
   public:
@@ -28,10 +28,10 @@ class Cache_metadata {
     int get_index(long address);
 
     //Funcion para la politica de reemplazo LRU con optimizacion
-    void lru_opt(int idx, int tag, int associativity, bool loadstore, Parametros* cache_blocks, int prediction[], Benchmark* metrics, int *contador);
+    void lru_opt(int index, int tag, int associativity, bool load_store, Parametros* cache_blocks, int prediction[], Benchmark* metrics, int *counter);
 
     //Funcion para la politica de reemplazo LRU
-    void lru(int idx, int tag, int associativity, bool loadstore, Parametros* cache_blocks, Benchmark* metrics, int* contador);
+    void lru(int index, int tag, int associativity, bool load_store, Parametros* cache_blocks, Benchmark* metrics, int* counter);
 };
 
 #endif // CACHE_H

@@ -23,7 +23,7 @@ class Benchmark
     
         Benchmark(float load_miss, float store_miss, float load_hit, float hits_store, int victim);
         /* Imprime resultados de las funciones */
-        void show_metrics(int size, int associativity, int block_size, int* contador, int* contador_opt , bool optimized);
+        void show_metrics(int size, int associativity, int block_size, int* counter, int* counter_opt , bool optimized);
 };
 
 #endif // BENCHMARK_H

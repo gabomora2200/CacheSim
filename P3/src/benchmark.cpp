@@ -9,11 +9,11 @@ Benchmark::Benchmark(float load_miss, float store_miss, float load_hit, float hi
 }
 
 
-void Benchmark::show_metrics(int size, int associativity, int block_size, int* contador, int* contador_opt, bool optimized){
+void Benchmark::show_metrics(int size, int associativity, int block_size, int* counter, int* counter_opt, bool optimized){
   
   float totHits = load_hit + store_hit;
   float totMiss = load_miss + store_miss;
-  float ratioMissHit = 100 - ((float(*contador_opt))/(float(*contador)))*100;
+  float ratioMissHit = 100 - ((float(*counter_opt))/(float(*counter)))*100;
 
   if(optimized){
     // si la cache esta optimizada  imprime esto
@@ -58,12 +58,12 @@ void Benchmark::show_metrics(int size, int associativity, int block_size, int* c
   
   if(optimized){
     //Imprime la cantidad total de predicciones con optimizacion
-    cout << "Cantidad de predicciones correctas mediante la optimización: "<< *contador_opt << endl;
+    cout << "Cantidad de predicciones correctas mediante la optimización: "<< *counter_opt << endl;
 
   }
   else{
     
-    cout << "\nRelacion de hits acertados optimizacion: " << (*contador_opt/totHits)*100 << "%" <<endl;
+    cout << "\nRelacion de hits acertados optimizacion: " << (*counter_opt/totHits)*100 << "%" <<endl;
     cout << "\n"                                              << endl;
 
   }
