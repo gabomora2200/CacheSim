@@ -4,8 +4,8 @@
 class Parametros {
   public:
     int counter_pred;
-    bool valid;
-    bool dirty;
+    bool valid_bit;
+    bool dirty_bit;
     int tag;
     int rp_value;
 
